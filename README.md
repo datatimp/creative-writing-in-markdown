@@ -1,7 +1,9 @@
-[//]: # (title: Composing Long-Form Fiction & Scripts in Markdown)
-[//]: # (date: 01-12-23)
-[//]: # (link: https://github.com/WrinkleRelease/Composing-In-Markdown)
-[//]: # (tags: markdown, writing, markdown-editor)
+---
+title: "Composing Long-Form Fiction & Scripts in Markdown"
+date: "2023-01-12"
+link: "https://github.com/WrinkleRelease/Composing-In-Markdown"
+tags: ["markdown", "writing", "markdown-editor"]
+---
 
 # Composing Long-Form Fiction & Scripts with Markdown
 
