@@ -1,0 +1,33 @@
+# Checks every link in the README on the 1st of each month.
+# If any are broken, it opens an issue listing them.
+# To run it now: Actions tab > Check links > Run workflow.
+
+name: Check links
+
+on:
+  schedule:
+    - cron: "0 15 1 * *"
+  workflow_dispatch:
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --max-retries 3 --accept 200..=299,429 README.md
+          fail: false
+
+      - name: Open an issue if any are broken
+        if: steps.lychee.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v6
+        with:
+          title: Broken links in the README
+          content-filepath: ./lychee/out.md
+          labels: broken links

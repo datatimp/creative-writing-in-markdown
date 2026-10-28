@@ -241,7 +241,29 @@ Now, when you call `Pandoc` from the `Markdown Preview Enhanced` extension, it w
 
 <br></a>
 
-## 4. Links
+## 4. Free Alternatives
+
+If VS Code isn't for you, these free apps are worth a look. All links and apps last checked in October 2026.
+
+### | 4.1. Screenplays
+
+| App | Systems | Notes |
+|---|---|---|
+| [Beat] | macOS | Free and open source. Built on Fountain, so your scripts open as they are. |
+| [Trelby] | Windows, Linux | Free and open source. Simple and fast, with standard screenplay formatting built in. Last update 2025. |
+| [Story Architect] | Windows, macOS, Linux | Open source, with character and location cards. Generous core free tier; some features are paid. Still in beta. |
+
+### | 4.2. Long-Form Prose
+
+| App | Systems | Notes |
+|---|---|---|
+| [novelWriter] | Windows, macOS, Linux | Free and open source. Plain text files with Markdown-like formatting, plus notes for characters, places and plot. Closest in spirit to this guide. |
+| [Manuskript] | Windows, Linux | Free and open source. A Scrivener-style outliner with character sheets, plot outlining and a storyboard view. |
+| [bibisco] | Windows, macOS, Linux | Free Community Edition with character profiles and story timelines. A paid edition adds more. |
+
+<br></a>
+
+## 5. Links
 - Better Fountain [features]
 - Fountain [syntax guide]
 - [Fiction Writer] guide
@@ -257,3 +279,9 @@ Now, when you call `Pandoc` from the `Markdown Preview Enhanced` extension, it w
 [1]: https://code.visualstudio.com
 [2]: https://pandoc.org/installing.html
 [3]: https://github.com/typst/typst/releases
+[Beat]: https://www.beat-app.fi
+[Trelby]: https://www.trelby.org
+[Story Architect]: https://starc.app
+[novelWriter]: https://novelwriter.io
+[Manuskript]: https://www.theologeek.ch/manuskript/
+[bibisco]: https://bibisco.com
