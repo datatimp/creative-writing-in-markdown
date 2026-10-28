@@ -1,0 +1,154 @@
+// -----------------------------------------------------------------------------
+//
+//  STANDARD MANUSCRIPT FORMAT TYPST TEMPLATE FOR PANDOC
+//
+//  Turns a Markdown file into a PDF in standard manuscript format, using
+//  Typst instead of LaTeX. Supports short stories (the default) and novels.
+//
+//  Example front matter:
+//
+//    ---
+//    title: AWESOME TITLE
+//    author: Jack Lance
+//    forename: Jack
+//    surname: Lance
+//    runningtitle: AWESOME
+//    wordcount: about 4,000
+//    street: 444 Gunsmoke Rd.
+//    location: City, ST 00000
+//    phone: (555) 222-2222
+//    email: example@email.com
+//    novel: false        # true for a novel's cover page and chapter breaks
+//    italics: false      # true to keep italics instead of underlining them
+//    output:
+//      pdf_document:
+//        pdf_engine: typst
+//        template: story.typst
+//    ---
+//
+//  From the command line:
+//
+//    pandoc story.md --pdf-engine=typst --template=story.typst -o story.pdf
+//
+//  Markdown headings:
+//
+//    # Part       new page, a third of the way down
+//    ## Chapter   two blank lines above (a novel starts each on a new page)
+//    ### Title    a chapter's title, centered under it
+//    ---          a scene break, printed as a centered #
+// -----------------------------------------------------------------------------
+
+#let novel = $if(novel)$true$else$false$endif$
+#let underline-emphasis = $if(italics)$false$else$true$endif$
+
+#let surname = [$if(surname)$$surname$$else$$author$$endif$]
+#let fullname = [$if(forename)$$forename$ $surname$$else$$author$$endif$]
+#let runningtitle = [$if(runningtitle)$$runningtitle$$else$$title$$endif$]
+#let wordcount = [$if(wordcount)$$wordcount$ words$endif$]
+#let address = (
+$if(street)$  [$street$],
+$endif$$if(location)$  [$location$],
+$endif$$if(phone)$  [$phone$],
+$endif$$if(email)$  [$email$],
+$endif$)
+
+// PAGE ------------------------------------------------------------------------
+// Letter paper, 1 inch margins. The header (Surname / Title / Page) sits half
+// an inch from the top, on every page but the first page of a short story or
+// a novel's cover.
+
+#set page(
+  paper: "us-letter",
+  margin: 1in,
+  header-ascent: 24pt,
+  header: context {
+    let page = counter(page).get().first()
+    let show-header = if novel { here().page() > 1 } else { page > 1 }
+    if show-header {
+      align(right)[#surname / #runningtitle / #page]
+    }
+  },
+)
+
+// TYPE ------------------------------------------------------------------------
+// Courier Prime at 12 pt, double spaced: each line is exactly 12 pt tall, with
+// a 12 pt gap between lines and between paragraphs. That gives the standard
+// 25 to 27 lines a page.
+
+#set text(
+  font: "$if(mainfont)$$mainfont$$else$Courier Prime$endif$",
+  size: 12pt,
+  lang: "en",
+  hyphenate: false,
+  top-edge: 0.8em,
+  bottom-edge: -0.2em,
+)
+
+#set par(
+  leading: 12pt,
+  spacing: 12pt,
+  justify: false,
+  first-line-indent: (amount: 0.5in, all: true),
+)
+
+#let single(body) = {
+  set par(leading: 0pt, spacing: 0pt, first-line-indent: 0pt)
+  body
+}
+
+// Emphasis is underlined, the manuscript convention for monospaced type.
+
+#show emph: it => if underline-emphasis { underline(it.body) } else { it }
+
+// Scene breaks (--- in Markdown) print as a centered #.
+
+#let divider() = align(center)[\#]
+#let horizontalrule = divider()
+#let horizontalRule = divider()
+
+// HEADINGS --------------------------------------------------------------------
+
+#show heading: it => {
+  set text(size: 12pt, weight: "regular")
+  set par(first-line-indent: 0pt)
+  let new-page = it.level == 1 or (novel and it.level == 2)
+  if new-page {
+    pagebreak(weak: true)
+    v(3in)
+  } else if it.level == 2 {
+    v(24pt)
+  }
+  block(width: 100%, below: 24pt, align(center, it.body))
+}
+
+// FIRST PAGE ------------------------------------------------------------------
+
+#single[
+  #grid(columns: (1fr, auto), fullname, if novel [] else [#wordcount])
+  #address.join(linebreak())
+]
+
+$if(novel)$
+#v(3in)
+#single(align(center)[
+  #upper[$title$]
+  #v(12pt)
+  a novel by $author$
+])
+#v(1fr)
+#align(center, wordcount)
+#pagebreak()
+#counter(page).update(1)
+$else$
+#v(2.2in)
+#single(align(center)[
+  #upper[$title$]
+  #v(12pt)
+  by $author$
+])
+#v(24pt)
+$endif$
+
+// BODY ------------------------------------------------------------------------
+
+$body$
